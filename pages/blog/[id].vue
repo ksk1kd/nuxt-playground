@@ -4,9 +4,24 @@ definePageMeta({
     return typeof route.params.id === 'string' && /^\d+$/.test(route.params.id)
   },
 })
-const route = useRoute()
+
+interface Post {
+  id: string
+  title: string
+  content: string
+}
+const { id } = useRoute().params
+const { data: post } = await useFetch<Post>(`https://api.vercel.app/blog/${id}`)
+
+if (!post.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page Not Found',
+  })
+}
 </script>
 
 <template>
-  <h1>Blog {{ route.params.id }}</h1>
+  <h1>{{ post?.title }}</h1>
+  <p>{{ post?.content }}</p>
 </template>

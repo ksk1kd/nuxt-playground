@@ -1,10 +1,18 @@
+<script setup lang="ts">
+interface Post {
+  id: string
+  title: string
+  content: string
+}
+
+const { data: posts } = await useFetch<Post[]>('https://api.vercel.app/blog')
+</script>
+
 <template>
   <h1>Blog List</h1>
   <ul>
-    <li><NuxtLink to="/blog/1">Blog 1</NuxtLink></li>
-    <li><NuxtLink to="/blog/2">Blog 2</NuxtLink></li>
-    <li><NuxtLink to="/blog/3">Blog 3</NuxtLink></li>
-    <li><NuxtLink to="/blog/4">Blog 4</NuxtLink></li>
-    <li><NuxtLink to="/blog/5">Blog 5</NuxtLink></li>
+    <li v-for="post in posts" :key="post.id">
+      <NuxtLink :to="`/blog/${post.id}`">{{ post.title }}</NuxtLink>
+    </li>
   </ul>
 </template>
